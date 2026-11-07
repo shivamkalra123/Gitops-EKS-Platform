@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Orders dashboard</title>
+    <style>
+      :root { font-family: Inter, system-ui, sans-serif; color: #f4f6ed; background: #090b08; }
+      body { display: grid; min-height: 100vh; margin: 0; place-items: center; }
+      main { width: min(620px, calc(100% - 40px)); padding: 36px; border: 1px solid #4e6a19; border-radius: 18px; background: #121710; box-shadow: 0 20px 65px #000; }
+      .tag { color: #c8ff3d; font-size: 12px; font-weight: 700; letter-spacing: .12em; }
+      h1 { margin: 12px 0 8px; font-size: 36px; } p { color: #b9c3ac; line-height: 1.6; }
+      button { margin-top: 14px; padding: 11px 16px; border: 0; border-radius: 8px; background: #c8ff3d; color: #101408; cursor: pointer; font-weight: 800; }
+      pre { min-height: 65px; margin-top: 24px; padding: 16px; overflow: auto; border-radius: 9px; background: #060805; color: #d9f99d; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="tag">KUBERNETES WEB APP</div>
+      <h1>Orders dashboard</h1>
+      <p>This website asks the Orders API for data through a Kubernetes Service.</p>
+      <button id="load-orders">Load orders</button>
+      <pre id="result">Click “Load orders” to call the API.</pre>
+    </main>
+    <script>
+      const result = document.querySelector('#result');
+      document.querySelector('#load-orders').addEventListener('click', async () => {
+        result.textContent = 'Loading…';
+        try {
+          const response = await fetch('/api/orders');
+          if (!response.ok) throw new Error(`Request failed: ${response.status}`);
+          result.textContent = JSON.stringify(await response.json(), null, 2);
+        } catch (error) { result.textContent = error.message; }
+      });
+    </script>
+  </body>
+</html>

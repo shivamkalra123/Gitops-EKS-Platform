@@ -1,0 +1,11 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata: { name: orders-api, namespace: argocd }
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/REPLACE_ORG/gitops-eks-platform.git
+    targetRevision: main
+    path: helm/orders-api
+  destination: { server: https://kubernetes.default.svc, namespace: orders }
+  syncPolicy: { automated: { prune: true, selfHeal: true }, syncOptions: [CreateNamespace=true] }
